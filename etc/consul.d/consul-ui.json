@@ -1,0 +1,15 @@
+{
+  "services": [
+    {
+        "id": "consul-ui",
+        "name": "consul-ui",
+        "tags": [ ],
+        "port": 8500,
+        "checks": [{
+            "script": "curl -sI http://localhost:8500/ui/ | grep '200 OK'",
+            "interval": "5s"
+        }]
+    }
+  ]
+}
+
