@@ -5,7 +5,7 @@ set -e
 CONSUL_BIN=/usr/local/bin/consul
 CONSUL_BOOTSTRAP=${CONSUL_BOOTSTRAP:-false}
 
-NODE_NAME=$(hostname -f)
+NODE_NAME=${NODE_PREFIX}-$(hostname -f)
 
 sed -i -e "s#\"node_name\":.*#\"node_name\": \"${NODE_NAME}\",#" /etc/consul.d/agent.json
 
@@ -22,10 +22,12 @@ fi
 
 if [ ! -z "${CONSUL_CLUSTER_IPS}" ]; then
     START_JOIN=""
-    for IP in $(echo ${CONSUL_CLUSTER_IPS} | sed -e 's/,/ /g');do
-       if [ "${NODE_NAME}" != "X${IP}" ];then
-          START_JOIN+=" ${IP}"
-       fi
+    for IP in $(echo ${CONSUL_CLUSTER_IPS} | sed -e 's/,/ /g'); do
+        if [ "${NODE_NAME}" != "X${IP}" ]; then
+            START_JOIN+=" ${IP}"
+        elif [ "X${CONSUL_SKIP_CURL}" == "Xtrue" ]; then
+            START_JOIN+=" ${IP}"
+        fi
     done
     START_JOIN=$(echo ${START_JOIN}|sed -e 's/ /\",\"/g')
     if [ "X${START_JOIN}" != "X" ]; then
@@ -45,7 +47,7 @@ if [ -n "$CONSUL_BIND_INTERFACE" ]; then
     echo "==> Found address '$CONSUL_BIND_ADDRESS' for interface '$CONSUL_BIND_INTERFACE', setting bind option..."
 fi
 
-trap 'consul leave' SIGTERM
+trap 'consul leave' HUP INT TERM EXIT
 
 setcap "cap_net_bind_service=+ep" ${CONSUL_BIN}
 
