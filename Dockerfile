@@ -1,6 +1,5 @@
 FROM jasonchw/alpine-base
 
-ARG GOSU_VER=1.9
 ARG CONSUL_VER=0.7.0
 ARG CONSUL_TEMPLATE_VER=0.15.0
 
@@ -13,9 +12,6 @@ RUN mkdir -p /var/consul/
 
 RUN apk update && apk upgrade && \
     apk add unzip nmap bc jq libcap openssl && \
-    curl -Lfso /usr/local/bin/gosu https://github.com/tianon/gosu/releases/download/$GOSU_VER/gosu-amd64 && \
-    chmod +x /usr/local/bin/gosu && \
-    gosu nobody true && \
     curl -Lfso /tmp/consul.zip https://releases.hashicorp.com/consul/${CONSUL_VER}/consul_${CONSUL_VER}_linux_amd64.zip && \
     cd /usr/local/bin/ && \
     unzip /tmp/consul.zip && \
