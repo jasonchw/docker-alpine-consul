@@ -1,4 +1,4 @@
-FROM jasonchw/alpine-base
+FROM jasonchw/alpine-base:3.4
 
 ARG CONSUL_VER=0.7.0
 ARG CONSUL_TEMPLATE_VER=0.15.0
