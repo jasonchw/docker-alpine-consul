@@ -1,7 +1,7 @@
 FROM jasonchw/alpine-base:3.4
 
-ARG CONSUL_VER=0.7.0
-ARG CONSUL_TEMPLATE_VER=0.15.0
+ARG CONSUL_VER=0.7.5
+ARG CONSUL_TEMPLATE_VER=0.18.1
 
 RUN mkdir -p /etc/consul.d/ && \
     mkdir -p /opt/consul-web-ui/ && \
